@@ -12,7 +12,7 @@ from .base import BaseSegmentor
 #** seems init weight may be important, maybe for starting from where you started.
 
 @SEGMENTORS.register_module()
-class EncoderDecoder(BaseSegmentor):
+class TSMEncoderDecoder(BaseSegmentor):
     """Encoder Decoder segmentors.
 
     EncoderDecoder typically consists of backbone, decode_head, auxiliary_head.
@@ -23,27 +23,50 @@ class EncoderDecoder(BaseSegmentor):
     def __init__(self,
                  backbone,
                  decode_head,
+                 is_shift,
+                 n_segments,
                  neck=None,
                  auxiliary_head=None,
                  train_cfg=None,
                  test_cfg=None,
                  pretrained=None,
                  init_cfg=None):
-        super(EncoderDecoder, self).__init__(init_cfg)
+        super(TSMEncoderDecoder, self).__init__(init_cfg)
         if pretrained is not None:
             assert backbone.get('pretrained') is None, \
                 'both backbone and segmentor set pretrained weight'
             backbone.pretrained = pretrained
-        self.backbone = builder.build_backbone(backbone)
+        
+        self.backbone = builder.build_backbone(backbone) 
+        backbone_name = backbone["type"]  #*mine 
+        if is_shift:
+            self._shift_backbone(backbone_name, n_segments) #*mine
         if neck is not None:
             self.neck = builder.build_neck(neck)
         self._init_decode_head(decode_head)
         self._init_auxiliary_head(auxiliary_head)
+        self.prev_activation = dict() #zeros. 
 
         self.train_cfg = train_cfg
         self.test_cfg = test_cfg
+        self.is_shift = is_shift
+        self.n_segments = n_segments
 
         assert self.with_decode_head
+    
+    #** My code
+    def _shift_backbone(self, backbone_name, n_segments):
+        print('=> backbone is: {}'.format(backbone_name))
+
+        if 'resnet' in backbone_name:
+            if self.is_shift:
+                print('Adding temporal shift...')
+                from ops.temporal_shift import make_temporal_shift
+                make_temporal_shift(self.backbone, n_segments)
+        else:
+            raise NotImplementedError
+
+
 
     def _init_decode_head(self, decode_head):
         """Initialize ``decode_head``"""
@@ -63,7 +86,7 @@ class EncoderDecoder(BaseSegmentor):
 
     def extract_feat(self, img):
         """Extract features from images."""
-        x = self.backbone(img)
+        x = self.backbone(img) #
         if self.with_neck:
             x = self.neck(x)
         return x
@@ -74,6 +97,8 @@ class EncoderDecoder(BaseSegmentor):
         """Encode images with backbone and decode into a semantic segmentation
         map of the same size as input."""
         x = self.extract_feat(img)
+        #** Perform removal of unneded images used for temporal images. 
+        x = x[0::self.n_segments] #extracts only image required for segmentation.
         out = self._decode_head_forward_test(x, img_metas)
         out = resize(
             input=out,

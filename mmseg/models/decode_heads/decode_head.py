@@ -160,6 +160,7 @@ class BaseDecodeHead(BaseModule, metaclass=ABCMeta):
         Returns:
             Tensor: The transformed inputs
         """
+        #**change this when you inherit for TSM_head.
 
         if self.input_transform == 'resize_concat':
             inputs = [inputs[i] for i in self.in_index]
