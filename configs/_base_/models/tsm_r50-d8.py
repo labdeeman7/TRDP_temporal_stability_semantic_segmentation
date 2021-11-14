@@ -1,6 +1,6 @@
 # model settings
 #** actually used to init your segmentor
-norm_cfg = dict(type='SyncBN', requires_grad=True)
+norm_cfg = dict(type='BN', requires_grad=True)
 model = dict(
     type='TSMEncoderDecoder',
     pretrained='open-mmlab://resnet50_v1c', #** need to change this for starting and stopping traning. 
