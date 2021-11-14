@@ -1,4 +1,5 @@
 # model settings
+#** actually used to init your segmentor
 norm_cfg = dict(type='SyncBN', requires_grad=True)
 model = dict(
     type='TSMEncoderDecoder',
@@ -18,7 +19,7 @@ model = dict(
         n_segments = 2),
     decode_head=dict(
         type='PSPHead',
-        in_channels=2048, #** Change this
+        in_channels=2048, #** Output of resnet
         in_index=3,
         channels=512,
         pool_scales=(1, 2, 3, 6),
@@ -28,9 +29,10 @@ model = dict(
         align_corners=False,
         loss_decode=dict(
             type='CrossEntropyLoss', use_sigmoid=False, loss_weight=1.0)),
+    is_shift = False, 
     auxiliary_head=dict(
         type='FCNHead',
-        in_channels=1024, #** Change this.
+        in_channels=1024, #** Output of NOT SURE.
         in_index=2,
         channels=256,
         num_convs=1,

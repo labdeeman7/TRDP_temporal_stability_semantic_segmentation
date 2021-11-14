@@ -30,7 +30,7 @@ def set_random_seed(seed, deterministic=False):
         torch.backends.cudnn.deterministic = True
         torch.backends.cudnn.benchmark = False
 
-
+#**  TODO Need to test shuffle for pytorch dataloader.
 def train_segmentor(model,
                     dataset,
                     cfg,
@@ -52,6 +52,7 @@ def train_segmentor(model,
             len(cfg.gpu_ids),
             dist=distributed,
             seed=cfg.seed,
+            shuffle=False, #we changing features between consecutive images, shuffling should not be done.
             drop_last=True) for ds in dataset
     ]
 

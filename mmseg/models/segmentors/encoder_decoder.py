@@ -68,7 +68,6 @@ class EncoderDecoder(BaseSegmentor):
             x = self.neck(x)
         return x
 
-    #**something to do here, in making the sequence images.
 
     def encode_decode(self, img, img_metas):
         """Encode images with backbone and decode into a semantic segmentation
