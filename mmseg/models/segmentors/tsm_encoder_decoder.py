@@ -11,7 +11,7 @@ from .base import BaseSegmentor
 
 #** seems init weight may be important, maybe for starting from where you started.
 
-@SEGMENTORS.register_module()
+@SEGMENTORS.register_module
 class TSMEncoderDecoder(BaseSegmentor):
     """Encoder Decoder segmentors.
 
