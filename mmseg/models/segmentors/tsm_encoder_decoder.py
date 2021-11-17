@@ -59,7 +59,7 @@ class TSMEncoderDecoder(BaseSegmentor):
 
         if 'resnet' in backbone_name:
             print('Adding temporal shift...')
-            from ops.temporal_shift import make_temporal_shift
+            from mmseg.ops.temporal_shift import make_temporal_shift
             make_temporal_shift(self.backbone)
         else:
             raise NotImplementedError
