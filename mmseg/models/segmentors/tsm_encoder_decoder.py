@@ -37,7 +37,8 @@ class TSMEncoderDecoder(BaseSegmentor):
             backbone.pretrained = pretrained
         
         self.backbone = builder.build_backbone(backbone) 
-        backbone_name = backbone["type"]  #*mine 
+        backbone_name = backbone["type"].lower()  #*mine 
+
         if is_shift:
             self._shift_backbone(backbone_name) #*mine
         if neck is not None:
