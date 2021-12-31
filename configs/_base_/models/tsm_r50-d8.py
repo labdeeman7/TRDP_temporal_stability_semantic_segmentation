@@ -3,7 +3,7 @@
 norm_cfg = dict(type='BN', requires_grad=True)
 model = dict(
     type='TSMEncoderDecoder',
-    pretrained='open-mmlab://resnet50_v1c', #** need to change this for starting and stopping traning. 
+    pretrained='checkpoints/resnet50_v1c-2cccc1ad.pth', #** need to change this for starting and stopping traning. 
     backbone=dict(
         type='ResNetV1c',
         depth=50,

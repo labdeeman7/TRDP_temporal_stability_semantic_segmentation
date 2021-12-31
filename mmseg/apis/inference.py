@@ -53,7 +53,6 @@ class LoadImage:
         Returns:
             dict: ``results`` will be returned containing loaded image.
         """
-        #** look at loading a sequence from TMANet.
         if isinstance(results['img'], str):
             results['filename'] = results['img']
             results['ori_filename'] = results['img']

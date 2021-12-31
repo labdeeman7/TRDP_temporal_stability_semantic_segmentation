@@ -6,12 +6,10 @@ import numpy as np
 parser = argparse.ArgumentParser(description='create video files from frames')
 parser.add_argument("--image_folder_path", type=str, help="path to folder")
 parser.add_argument("--video_path", type=str, help="path to video")
-parser.add_argument("--video_frames_path", type=str, help="path to video frames")
 
 args = parser.parse_args()
 image_folder_path = args.image_folder_path
 video_path = args.video_path
-video_frames_path = args.video_frames_path
 
 
 def generate_video(image_folder, video_path):
@@ -34,7 +32,7 @@ def generate_video(image_folder, video_path):
     height, width, layers = frame.shape
 
     fourcc = cv2.VideoWriter_fourcc(*'XVID')
-    video = cv2.VideoWriter(video_path, fourcc, 1, (width, height))
+    video = cv2.VideoWriter(video_path, fourcc, 10, (width, height))
 
     # Appending the images to the video one by one
     for image in images:

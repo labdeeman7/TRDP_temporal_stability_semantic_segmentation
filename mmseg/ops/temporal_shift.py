@@ -29,6 +29,7 @@ class TemporalShift(nn.Module):
         _, c, _, _ = x.size()
         fold = c // fold_div
         out = torch.zeros_like(x)
+        out[0, :fold, :] = x[0, :fold, :] #for the first image in batch
         out[1:, :fold, :] = x[:-1, :fold, :]
         out[:, fold:, :] = x[:, fold:, :]
         return out, x[:-1, :fold, :]

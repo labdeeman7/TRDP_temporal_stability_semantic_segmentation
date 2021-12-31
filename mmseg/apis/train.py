@@ -52,7 +52,7 @@ def train_segmentor(model,
             len(cfg.gpu_ids),
             dist=distributed,
             seed=cfg.seed,
-            shuffle=False, #we changing features between consecutive images, shuffling should not be done.
+            shuffle=False, #*we changing features between consecutive images, shuffling should not be done.
             drop_last=True) for ds in dataset
     ]
 
